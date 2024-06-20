@@ -1,0 +1,21 @@
+Tema 1  -   Dataplane Router
+Zugravescu Adina Andreea 322CD
+
+The subtasks Routing Process, Efficient Longest Prefix Match and ICMP Protocol have been solved.
+
+In the implementation, I used concepts from Laboratory 4, starting from the implemented code and the suggestions provided there:
+
+   1. Routing Process:
+        Routing table and ARP table are declared globally with their respective sizes, and they are read and allocated in the main function.
+        When a packet is received, it is checked if it is an IP packet. If so, the IP header is extracted.
+        If the destination is not reached, TTL is checked. Then, the search function is called to find the best route for the packet.
+        If the checksum is valid and the TTL condition (>1) is satisfied, it is decremented, and the checksum is recalculated after the modifications.
+        If a valid route is found, the ARP table is searched to find the MAC address corresponding to the IP address of the next hop from the previously found routing table entry.
+        Finally, the fields in the Ethernet header are completed, and the packet is sent.
+
+    2. Efficient Longest Prefix Match:
+        Efficient search is achieved using binary search, reducing complexity to O(logn).
+        The routing table is sorted after reading, based on prefix and mask, and then the binary search function (binary_search_route) is applied to the sorted table, resulting in better complexity than linear search.
+
+    3. ICMP Protocol:
+        An ICMP message is sent in 3 situations, such as : when there is no route to the destination, when the TTL field expires, and when the router receives ICMP messages of "Echo request" type destined for itself and responds with an ICMP message of "Echo reply" type (type 0, code 0). So , the headers will be initialized, added to the buffer, and in the case of Destination unreachable or Time exceeded, the IPv4 header of the dropped packet, as well as the first 64 bits of the payload of the original packet will be added above the ICMP header.
